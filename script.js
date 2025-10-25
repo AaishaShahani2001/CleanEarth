@@ -39,7 +39,6 @@ function prevProjectSlide() {
   itemIndex = (itemIndex - 1 + itemBox.length) % itemBox.length;
   changeProjectImage();
 }
-// Hook up to inline HTML lightbox controls:
 window.nextSlide = nextProjectSlide;
 window.prevSlide = prevProjectSlide;
 
@@ -92,6 +91,7 @@ const progressBar = document.getElementById('progressBar');
 
 let currentSlide = 0;
 let autoSlideInterval = null;
+
 
 // --- Data-------
 const infoData = {
@@ -203,7 +203,6 @@ document.querySelectorAll('.box a').forEach(btn => {
     const data = infoData[key];
     if (!data) return;
 
-    // reset UI
     clearInterval(autoSlideInterval);
     infoTitle.textContent = data.title || '';
     infoText.textContent = data.text || '';
@@ -213,29 +212,31 @@ document.querySelectorAll('.box a').forEach(btn => {
     progressWrap.style.display = 'none';
     currentSlide = 0;
 
-    // posts (multi-image)
+    // Open modal with history state
+    function openInfoModal() {
+      infoModal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      history.pushState({ modalOpen: true }, '');
+    }
+
     if (data.images && data.images.length > 0) {
       sliderTrack.innerHTML = data.images.map(src => `<img src="${src}" alt="">`).join('');
       sliderControls.style.display = 'flex';
       progressWrap.style.display = 'block';
       sliderTrack.style.transform = 'translateX(0)';
-      infoModal.style.display = 'flex';
-
-      // wait for images to layout then size container
+      openInfoModal();
       setTimeout(updateSliderHeight, 350);
       startAutoSlide(data.images.length);
-    }
-    // services (single image)
-    else if (data.img) {
+    } else if (data.img) {
       sliderTrack.innerHTML = `<img src="${data.img}" alt="">`;
       sliderTrack.style.transform = 'translateX(0)';
-      infoModal.style.display = 'flex';
+      openInfoModal();
       setTimeout(updateSliderHeight, 350);
     }
   });
 });
 
-// =================== Manual Controls (Modal) ===================
+// =================== Manual Controls ===================
 nextBtn.addEventListener('click', e => {
   e.stopPropagation();
   const total = sliderTrack.children.length;
@@ -255,7 +256,7 @@ prevBtn.addEventListener('click', e => {
   }
 });
 
-// Optional: keyboard arrows for modal
+// =================== Keyboard Navigation ===================
 window.addEventListener('keydown', e => {
   if (infoModal.style.display !== 'flex') return;
   const total = sliderTrack.children.length;
@@ -272,13 +273,19 @@ window.addEventListener('keydown', e => {
 });
 
 // =================== Close Modal ===================
-closeModal.onclick = () => {
+function closeInfoModal() {
   infoModal.style.display = 'none';
+  document.body.style.overflow = 'auto';
   clearInterval(autoSlideInterval);
-};
+}
+closeModal.onclick = closeInfoModal;
 window.onclick = e => {
-  if (e.target === infoModal) {
-    infoModal.style.display = 'none';
-    clearInterval(autoSlideInterval);
+  if (e.target === infoModal) closeInfoModal();
+};
+
+// --- Browser Back Button Handling ---
+window.onpopstate = function (event) {
+  if (infoModal.style.display === 'flex') {
+    closeInfoModal();
   }
 };
