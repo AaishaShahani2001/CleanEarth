@@ -323,3 +323,136 @@ header .fa-bars{
 
 /* Donate background (kept from your original) */
 #donate{ background-image:url('images/donate.png'); }
+
+
+/* Info Modal */
+/* --- Info Modal (shared for services & posts) --- */
+.info-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 500;
+  backdrop-filter: blur(5px);
+}
+
+.info-content {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 3rem;
+  max-width: 700px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: fadeInUp 0.4s ease;
+}
+
+.info-content h2 {
+  color: var(--green);
+  font-size: 2.5rem;
+  margin: 1rem 0;
+}
+
+.info-content p {
+  color: #333;
+  font-size: 1.6rem;
+  line-height: 1.6;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 2.5rem;
+  color: #555;
+  cursor: pointer;
+}
+.close-modal:hover { color: crimson; }
+
+/* Adaptive Image Slider (auto height transition) */
+.slider-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  background: #f7f7f7;
+  transition: height 0.6s ease; /* smooth height animation */
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+  will-change: transform;
+}
+
+.slider-track img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: block;
+  background: #f7f7f7;
+  margin-inline: auto;
+}
+
+/* controls (keep existing look) */
+.slider-controls {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 10px;
+}
+.slider-controls button {
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  cursor: pointer;
+  font-size: 1.8rem;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+.slider-controls button:hover {
+  background: var(--green);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* progress bar */
+.slider-progress {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-bar {
+  width: 0;
+  height: 100%;
+  background: var(--green);
+  border-radius: 10px;
+  transition: width 5s linear;
+}
+
+
+@keyframes fadeInUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
